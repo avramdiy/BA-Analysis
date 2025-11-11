@@ -17,6 +17,17 @@ Run with: `python app/data.py` then visit `http://localhost:5000`
 
 ### 2nd Commit
 
+For the second commit I kept the Flask API behavior unchanged but cleaned and prepared the dataset for analysis:
+
+- Dropped the `OpenInt` column from the loaded CSV to simplify the table and downstream metrics.
+- Converted `Date` to datetime and split the original DataFrame (1970-01-02 through 2017-11-10) into three time-sliced DataFrames for focused analysis:
+	- `df_1970_1989` — early historical period (1970-01-01 through 1989-12-31)
+	- `df_1990_1999` — 1990s era (1990-01-01 through 1999-12-31)
+	- `df_2000_2017` — modern era (2000-01-01 through dataset end 2017-11-10)
+
+Reasoning: these splits provide natural historical groupings (early long-term growth, 1990s market dynamics, and the 2000s/2010s including the 2008 crisis and recovery) which can be useful for era-based analysis and modeling while keeping the API endpoints unchanged.
+
+
 ### 3rd Commit
 
 ### 4th Commit
