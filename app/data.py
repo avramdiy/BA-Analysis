@@ -64,6 +64,41 @@ def _make_grouped_bar_png(months, a, b, c, labels=('1970-1989','1990-1999','2000
 
 _monthly_volume_chart_b64 = _make_grouped_bar_png(months, vals_70_89, vals_90_99, vals_00_17)
 
+# --- 4th Commit: yearly moving average of Open price (line chart) ---
+def _annual_open_and_ma(df, window=3):
+    # group by year and compute mean Open price
+    annual = df.groupby(df['Date'].dt.year)['Open'].mean().sort_index()
+    # compute simple moving average over `window` years
+    ma = annual.rolling(window=window, min_periods=1, center=False).mean()
+    return annual.index.to_list(), annual.values, ma.values
+
+years_70, annual_70, ma_70 = _annual_open_and_ma(df_1970_1989, window=3)
+years_90, annual_90, ma_90 = _annual_open_and_ma(df_1990_1999, window=3)
+years_00, annual_00, ma_00 = _annual_open_and_ma(df_2000_2017, window=3)
+
+def _make_yearly_ma_line_png(series_list, labels_list, colors=None):
+    fig, ax = plt.subplots(figsize=(10,4))
+    for (years, annual, ma), label in zip(series_list, labels_list):
+        # plot the moving average line
+        ax.plot(years, ma, marker='o', label=label)
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Open Price (USD) - 3yr MA')
+    ax.set_title('Yearly Open Price (3-year moving average) by Era')
+    ax.legend()
+    plt.tight_layout()
+
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png', dpi=150)
+    plt.close(fig)
+    buf.seek(0)
+    data = base64.b64encode(buf.read()).decode('ascii')
+    return data
+
+_yearly_open_ma_chart_b64 = _make_yearly_ma_line_png(
+    [ (years_70, annual_70, ma_70), (years_90, annual_90, ma_90), (years_00, annual_00, ma_00) ],
+    ['1970-1989 (3yr MA)','1990-1999 (3yr MA)','2000-2017 (3yr MA)']
+)
+
 
 @app.route('/')
 def index():
@@ -90,6 +125,10 @@ def index():
             <h4>Average monthly volume (by calendar month)</h4>
             <p class="text-muted">Bar chart compares average monthly volume (Jan–Dec) across three eras.</p>
             <img src="data:image/png;base64,{_monthly_volume_chart_b64}" alt="avg monthly volume chart" style="max-width:100%;height:auto;"/>
+
+            <h4 class="mt-4">Yearly Open price (3-year moving average)</h4>
+            <p class="text-muted">Line chart shows the yearly open price smoothed with a 3-year moving average for each era.</p>
+            <img src="data:image/png;base64,{_yearly_open_ma_chart_b64}" alt="yearly open ma chart" style="max-width:100%;height:auto;"/>
             {html_table}
         </div>
     </body>

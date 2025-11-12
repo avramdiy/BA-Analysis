@@ -38,7 +38,14 @@ For the third commit I added a short analysis and visualization of average month
 
 Why: comparing average monthly seasonality across eras helps surface changes in trading activity patterns (for example, stronger volumes in certain months or structural shifts across decades).
 
-
 ### 4th Commit
+
+For the fourth commit I added a yearly analysis of the `Open` price and visualized it as a smoothed line chart:
+
+- Computed yearly average `Open` price for each era (`df_1970_1989`, `df_1990_1999`, `df_2000_2017`).
+- Calculated a 3-year simple moving average (3yr MA) of the yearly averages to smooth short-term noise.
+- Rendered a line chart with the 3yr MA for each era and embedded the PNG on the main index page (`GET /`), keeping API endpoints unchanged.
+
+Why: annualizing and smoothing the `Open` price highlights longer-term trends and makes era-to-era comparisons clearer (for example, pre-1990 trends vs. 2000s behavior).
 
 ### 5th Commit
