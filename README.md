@@ -30,6 +30,15 @@ Reasoning: these splits provide natural historical groupings (early long-term gr
 
 ### 3rd Commit
 
+For the third commit I added a short analysis and visualization of average monthly trading volume for each era created in commit 2.
+
+- Computed the average monthly volume grouped by calendar month (Jan–Dec) for each era (`df_1970_1989`, `df_1990_1999`, `df_2000_2017`).
+- Rendered a grouped bar chart (three bars per month) comparing the average monthly volumes across the three eras.
+- Embedded the chart directly on the main index page (`GET /`) as a PNG image (generated with matplotlib and encoded to base64). The API endpoints remain unchanged.
+
+Why: comparing average monthly seasonality across eras helps surface changes in trading activity patterns (for example, stronger volumes in certain months or structural shifts across decades).
+
+
 ### 4th Commit
 
 ### 5th Commit
