@@ -100,6 +100,22 @@ _yearly_open_ma_chart_b64 = _make_yearly_ma_line_png(
 )
 
 
+# --- 5th Commit: yearly moving average of Close price (line chart) ---
+def _annual_close_and_ma(df, window=3):
+    annual = df.groupby(df['Date'].dt.year)['Close'].mean().sort_index()
+    ma = annual.rolling(window=window, min_periods=1).mean()
+    return annual.index.to_list(), annual.values, ma.values
+
+years_c_70, annual_c_70, ma_c_70 = _annual_close_and_ma(df_1970_1989, window=3)
+years_c_90, annual_c_90, ma_c_90 = _annual_close_and_ma(df_1990_1999, window=3)
+years_c_00, annual_c_00, ma_c_00 = _annual_close_and_ma(df_2000_2017, window=3)
+
+_yearly_close_ma_chart_b64 = _make_yearly_ma_line_png(
+    [ (years_c_70, annual_c_70, ma_c_70), (years_c_90, annual_c_90, ma_c_90), (years_c_00, annual_c_00, ma_c_00) ],
+    ['1970-1989 Close (3yr MA)','1990-1999 Close (3yr MA)','2000-2017 Close (3yr MA)']
+)
+
+
 @app.route('/')
 def index():
     """Load and display BA stock data as HTML table"""
@@ -129,6 +145,10 @@ def index():
             <h4 class="mt-4">Yearly Open price (3-year moving average)</h4>
             <p class="text-muted">Line chart shows the yearly open price smoothed with a 3-year moving average for each era.</p>
             <img src="data:image/png;base64,{_yearly_open_ma_chart_b64}" alt="yearly open ma chart" style="max-width:100%;height:auto;"/>
+
+            <h4 class="mt-4">Yearly Close price (3-year moving average)</h4>
+            <p class="text-muted">Line chart shows the yearly close price smoothed with a 3-year moving average for each era.</p>
+            <img src="data:image/png;base64,{_yearly_close_ma_chart_b64}" alt="yearly close ma chart" style="max-width:100%;height:auto;"/>
             {html_table}
         </div>
     </body>

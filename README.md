@@ -49,3 +49,11 @@ For the fourth commit I added a yearly analysis of the `Open` price and visualiz
 Why: annualizing and smoothing the `Open` price highlights longer-term trends and makes era-to-era comparisons clearer (for example, pre-1990 trends vs. 2000s behavior).
 
 ### 5th Commit
+
+For the fifth commit I added a yearly analysis of the `Close` price and visualized it as a smoothed line chart:
+
+- Computed yearly average `Close` price for each era (`df_1970_1989`, `df_1990_1999`, `df_2000_2017`).
+- Calculated a 3-year simple moving average (3yr MA) of the yearly averages to smooth short-term noise.
+- Rendered a line chart with the 3yr MA for each era and embedded the PNG on the main index page (`GET /`), keeping API endpoints unchanged.
+
+Why: annualizing and smoothing the `Close` price highlights longer-term trends and complements the Open-price analysis from commit 4, giving a fuller picture of price dynamics across eras.
